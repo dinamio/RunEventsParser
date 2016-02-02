@@ -8,34 +8,38 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import sun.rmi.runtime.Log;
-
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
 /**
- * Created by Николай on 31.01.2016.
+ * Created by пїЅпїЅпїЅпїЅпїЅпїЅпїЅ on 31.01.2016.
  */
 public class TopRunnersParser {
 
     private static final String DQ = "DQ";
 
-    public List<Result> parse(String path)
-    {
-        List<Result> resultList = new ArrayList<Result>();
-        Document doc  = null;
+    private String parserFile ="dataForParser.html";
 
-        try {
-            doc = Jsoup.connect(path).get();
-        } catch (IOException e) {
-            e.printStackTrace();
+    public List<Result> parse(String path) throws IOException {
+
+        Document doc  = null;
+        List<Result> resultList = new ArrayList<Result>();
+        if((new File(parserFile).exists())) {
+                doc = Jsoup.parse(new File(parserFile),"utf-8");
+        }
+        else {
+            try {
+                doc = Jsoup.connect(path).get();
+                createFileForOfflineParser(path);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         Element table = doc.select("table").get(1);
         Elements rows = table.select("tr");//TODO Fix if row has not name and surname
-
         for (int i = 0; i < rows.size(); i++) {
             String resultData = rows.get(i).text();
             try {
@@ -71,7 +75,23 @@ public class TopRunnersParser {
     }
 
     public String parseToJson(String path){
-        List<Result> resultList = parse(path);
+        List<Result> resultList = null;
+        try {
+            resultList = parse(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return new Gson().toJson(resultList);
+    }
+
+    public void createFileForOfflineParser(String path){
+        try {
+            Document doc = Jsoup.connect(path).get();
+            BufferedWriter out = new BufferedWriter(new PrintWriter(parserFile,"utf-8"));
+            out.write(String.valueOf(doc));
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
