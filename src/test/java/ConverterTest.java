@@ -2,17 +2,15 @@ import com.runeventsparser.bom.Result;
 import com.runeventsparser.service.Converter;
 import com.runeventsparser.service.TopRunnersParser;
 import org.junit.Test;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 /**
- * Created by Николай on 01.02.2016.
+ * Created by пїЅпїЅпїЅпїЅпїЅпїЅпїЅ on 01.02.2016.
  */
 public class ConverterTest {
     @Test
@@ -23,20 +21,20 @@ public class ConverterTest {
         TopRunnersParser topRunnersParser = new TopRunnersParser();
 
         List<Result> resultList = null;
+
+        String jsonFile = "src/main/java/com/runeventsparser/Files/JsonFiles/TopRunnersTables.json";
+
         try {
             resultList = topRunnersParser.parse(path);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        String jsonFile = "parserDatas.json";
-
         Converter converter = new Converter();
 
         List<Result> listFromJson = new ArrayList<Result>();
         try {
-            converter.convertToJson();
-            listFromJson = converter.convertToJava();
+            converter.convertToJson(jsonFile);
+            listFromJson = converter.convertToJava(jsonFile);
         } catch (IOException e) {
             e.printStackTrace();
         }

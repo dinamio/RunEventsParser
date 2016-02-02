@@ -1,7 +1,6 @@
 package com.runeventsparser.service;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.runeventsparser.bom.Result;
@@ -14,17 +13,17 @@ import java.util.List;
  */
 public class Converter {
 
-    private String jsonFile = "parserData.json";
-
-
-    public  void convertToJson() throws IOException {
+    public  void convertToJson(String jsonFile) throws IOException {
+        String path ="http://toprunners.org/results/35-pobeg-iz-mzhigorya.html";
+        String json;
         TopRunnersParser topRunnersParser = new TopRunnersParser();
-        String path = "http://toprunners.org/results/35-pobeg-iz-mzhigorya.html";
-        List<Result> resultList = topRunnersParser.parse(path);
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.writeValue(new File(jsonFile),resultList );
+        json=topRunnersParser.parseToJson(path);
+        BufferedWriter out = new BufferedWriter(new PrintWriter(jsonFile,"utf-8"));
+        out.write(json);
+        out.close();
+
     }
-    public List<Result> convertToJava() throws IOException {
+    public List<Result> convertToJava(String jsonFile) throws IOException {
       Gson gson = new Gson();
         String json;
         BufferedReader bufferedReader = new BufferedReader( new InputStreamReader( new FileInputStream( jsonFile), "utf-8" ) );

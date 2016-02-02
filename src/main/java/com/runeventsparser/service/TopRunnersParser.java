@@ -20,7 +20,7 @@ public class TopRunnersParser {
 
     private static final String DQ = "DQ";
 
-    private String parserFile ="dataForParser.html";
+    String parserFile = "src/main/java/com/runeventsparser/Files/HtmlFiles/TopRunners.html";
 
     public List<Result> parse(String path) throws IOException {
 

@@ -1,14 +1,11 @@
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.runeventsparser.bom.Result;
-import com.runeventsparser.service.Converter;
 import com.runeventsparser.service.TopRunnersParser;
 import org.junit.Test;
-
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
