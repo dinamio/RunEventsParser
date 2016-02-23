@@ -64,7 +64,7 @@ public class TopRunnersParser {
         String flag = token.nextToken();
 
         distance.setLength(10.0);
-        distance.setName("10 km");
+        distance.setName("10 км");
         runner.setSex(Sex.MALE);
         result.setDistance(distance);
         result.setNumber(token.nextToken());
