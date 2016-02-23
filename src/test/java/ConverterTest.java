@@ -22,7 +22,7 @@ public class ConverterTest {
 
         List<Result> resultList = null;
 
-        String jsonFile = "src/main/java/com/runeventsparser/Files/JsonFiles/TopRunnersTables.json";
+        String jsonFile = "src/main/java/com/runeventsparser/Files/JsonFiles/VseProbegi.json";
 
         try {
             resultList = topRunnersParser.parse(path);

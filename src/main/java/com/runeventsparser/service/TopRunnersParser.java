@@ -16,7 +16,7 @@ import java.util.StringTokenizer;
  */
 public class TopRunnersParser {
 
-    String parserFile = "src/main/java/com/runeventsparser/Files/HtmlFiles/TopRunners.html";
+    String parserFile = "src/main/java/com/runeventsparser/Files/HtmlFiles/VseProbegi.html";
 
     public List<Result> parse(String path) throws IOException {
 
