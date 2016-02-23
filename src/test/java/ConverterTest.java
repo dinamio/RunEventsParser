@@ -16,7 +16,7 @@ public class ConverterTest {
     @Test
     public void converterTest(){
 
-        String path = "http://toprunners.org/results/35-pobeg-iz-mzhigorya.html";
+        String path = "http://vseprobegi.org/img/snowrun16_men_results.htm";
 
         TopRunnersParser topRunnersParser = new TopRunnersParser();
 
@@ -38,14 +38,17 @@ public class ConverterTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         assertNotNull(new File(jsonFile));
         assertEquals(resultList.size(), listFromJson.size());
         assertEquals(resultList.get(0).getRunner().getName(),listFromJson.get(0).getRunner().getName());
         assertEquals(resultList.get(0).getRunner().getSurname(),listFromJson.get(0).getRunner().getSurname());
-        assertEquals(resultList.get(0).getDistance(),listFromJson.get(0).getDistance());
+        assertEquals(resultList.get(0).getDistance().getName(),listFromJson.get(0).getDistance().getName());
+        assertEquals(resultList.get(0).getDistance().getLength(),listFromJson.get(0).getDistance().getLength());
         assertEquals(resultList.get(0).getNumber(),listFromJson.get(0).getNumber());
         assertEquals(resultList.get(0).getRace(),listFromJson.get(0).getRace());
         assertEquals(resultList.get(0).getTime(),listFromJson.get(0).getTime());
+        assertEquals(resultList.get(0).getRunner().getSex(),listFromJson.get(0).getRunner().getSex());
 
     }
 }

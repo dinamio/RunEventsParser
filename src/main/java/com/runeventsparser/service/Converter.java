@@ -14,7 +14,7 @@ import java.util.List;
 public class Converter {
 
     public  void convertToJson(String jsonFile) throws IOException {
-        String path ="http://toprunners.org/results/35-pobeg-iz-mzhigorya.html";
+        String path ="http://vseprobegi.org/img/snowrun16_men_results.htm";
         String json;
         TopRunnersParser topRunnersParser = new TopRunnersParser();
         json=topRunnersParser.parseToJson(path);

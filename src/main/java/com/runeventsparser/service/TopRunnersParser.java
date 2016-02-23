@@ -1,9 +1,7 @@
 package com.runeventsparser.service;
 
 import com.google.gson.Gson;
-import com.runeventsparser.bom.Result;
-import com.runeventsparser.bom.Runner;
-import com.runeventsparser.bom.Time;
+import com.runeventsparser.bom.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -17,8 +15,6 @@ import java.util.StringTokenizer;
  * Created by ������� on 31.01.2016.
  */
 public class TopRunnersParser {
-
-    private static final String DQ = "DQ";
 
     String parserFile = "src/main/java/com/runeventsparser/Files/HtmlFiles/TopRunners.html";
 
@@ -38,13 +34,13 @@ public class TopRunnersParser {
             }
         }
 
-        Element table = doc.select("table").get(1);
-        Elements rows = table.select("tr");//TODO Fix if row has not name and surname
-        for (int i = 0; i < rows.size(); i++) {
+        Element table = doc.select("table").get(0);
+        Elements rows = table.select("tr");
+        for (int i = 4; i <=194; i++) {
             String resultData = rows.get(i).text();
             try {
-                Result result = parseResultRow(resultData);
-                resultList.add(result);
+               Result result = parseResultRow(resultData);
+               resultList.add(result);
             }catch (IllegalArgumentException e){
                 e.printStackTrace();
             }
@@ -52,20 +48,39 @@ public class TopRunnersParser {
         return resultList;
     }
     public Result parseResultRow(String runnerData){
+
+        Distance distance = new Distance();
+
         Runner runner = new Runner();
 
         Result result = new Result();
 
         StringTokenizer token = new StringTokenizer (runnerData);
 
+        String garbage="";
+
         Time time = new Time();
+
         String flag = token.nextToken();
-        if(flag.equals(DQ))throw new IllegalArgumentException("Runner is DQ");
-        runner.setName(token.nextToken());
-        runner.setSurname(token.nextToken());
+
+        distance.setLength(10.0);
+        distance.setName("10 km");
+        runner.setSex(Sex.MALE);
+        result.setDistance(distance);
         result.setNumber(token.nextToken());
+        runner.setSurname(token.nextToken());
+        runner.setName(token.nextToken());
+
+        garbage=token.nextToken();
+        garbage=token.nextToken();
+        garbage=token.nextToken();
+
         StringTokenizer timeToken = new StringTokenizer(token.nextToken(),":,; ");
+        if(timeToken.countTokens()<3)
+            time.setHours(0);
+        else
         time.setHours(Integer.valueOf(timeToken.nextToken()));
+
         time.setMinutes(Integer.valueOf(timeToken.nextToken()));
         time.setSeconds(Integer.valueOf(timeToken.nextToken()));
         result.setTime(time);
