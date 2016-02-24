@@ -6,6 +6,7 @@ import com.google.gson.reflect.TypeToken;
 import com.runeventsparser.bom.Result;
 import java.io.*;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,10 +15,14 @@ import java.util.List;
 public class Converter {
 
     public  void convertToJson(String jsonFile) throws IOException {
-        String path ="http://vseprobegi.org/img/snowrun16_men_results.htm";
+        String pathForMenRace ="http://vseprobegi.org/img/snowrun16_men_results.htm";
+        String pathForWomenRace="http://vseprobegi.org/img/snowrun16_women_results.htm";
+        List<String> pathList = new ArrayList<String>();
+        pathList.add(pathForMenRace);
+        pathList.add(pathForWomenRace);
         String json;
         TopRunnersParser topRunnersParser = new TopRunnersParser();
-        json=topRunnersParser.parseToJson(path);
+        json=topRunnersParser.parseToJson(pathList);
         BufferedWriter out = new BufferedWriter(new PrintWriter(jsonFile,"utf-8"));
         out.write(json);
         out.close();

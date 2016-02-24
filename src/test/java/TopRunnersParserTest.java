@@ -6,6 +6,7 @@ import com.runeventsparser.service.TopRunnersParser;
 import org.junit.Test;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -17,27 +18,29 @@ import static org.junit.Assert.assertNotNull;
 public class TopRunnersParserTest {
     @Test
     public  void parserTest() {
-        String parserFile ="dataForParser.html";
-
-        String path = "http://vseprobegi.org/img/snowrun16_men_results.htm";
 
         TopRunnersParser topRunnersParser = new TopRunnersParser();
 
         List<Result> resultList = null;
 
+        String pathForMenRace ="http://vseprobegi.org/img/snowrun16_men_results.htm";
+        String pathForWomenRace="http://vseprobegi.org/img/snowrun16_women_results.htm";
+        List<String> pathList = new ArrayList<String>();
+        pathList.add(pathForMenRace);
+        pathList.add(pathForWomenRace);
+
         try {
-            resultList = topRunnersParser.parse(path);
+            resultList = topRunnersParser.parse(pathList);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        assertNotNull(parserFile);
-        assertEquals(191,resultList.size());
+        assertEquals(282,resultList.size());
         assertEquals("liebiediev",resultList.get(14).getRunner().getSurname());
         assertEquals("yehor",resultList.get(14).getRunner().getName());
         assertEquals(Sex.MALE, resultList.get(14).getRunner().getSex());
         assertEquals("236",resultList.get(14).getNumber());
         assertEquals("00:36:57",resultList.get(14).getTime().getTimeToString());
-        assertEquals("10 km",resultList.get(14).getDistance().getName());
+        //TODO Assert distance.getName();
         assertEquals(String.valueOf(10.0), String.valueOf(resultList.get(14).getDistance().getLength()));
 
     }

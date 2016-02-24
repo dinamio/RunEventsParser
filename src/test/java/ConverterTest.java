@@ -16,8 +16,11 @@ public class ConverterTest {
     @Test
     public void converterTest(){
 
-        String path = "http://vseprobegi.org/img/snowrun16_men_results.htm";
-
+        String pathForMenRace ="http://vseprobegi.org/img/snowrun16_men_results.htm";
+        String pathForWomenRace="http://vseprobegi.org/img/snowrun16_women_results.htm";
+        List<String> pathList = new ArrayList<String>();
+        pathList.add(pathForMenRace);
+        pathList.add(pathForWomenRace);
         TopRunnersParser topRunnersParser = new TopRunnersParser();
 
         List<Result> resultList = null;
@@ -25,7 +28,7 @@ public class ConverterTest {
         String jsonFile = "src/main/java/com/runeventsparser/Files/JsonFiles/VseProbegi.json";
 
         try {
-            resultList = topRunnersParser.parse(path);
+            resultList = topRunnersParser.parse(pathList);
         } catch (IOException e) {
             e.printStackTrace();
         }
