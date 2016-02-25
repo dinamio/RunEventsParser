@@ -21,8 +21,8 @@ public class Converter {
         pathList.add(pathForMenRace);
         pathList.add(pathForWomenRace);
         String json;
-        TopRunnersParser topRunnersParser = new TopRunnersParser();
-        json=topRunnersParser.parseToJson(pathList);
+        VseProbegiParser vseProbegiParser = new VseProbegiParser();
+        json= vseProbegiParser.parseToJson(pathList);
         BufferedWriter out = new BufferedWriter(new PrintWriter(jsonFile,"utf-8"));
         out.write(json);
         out.close();

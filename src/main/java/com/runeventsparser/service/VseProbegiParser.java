@@ -14,7 +14,7 @@ import java.util.StringTokenizer;
 /**
  * Created by ������� on 31.01.2016.
  */
-public class TopRunnersParser {
+public class VseProbegiParser {
 
     String parserFileForMen = "src/main/java/com/runeventsparser/Files/HtmlFiles/VseProbegiMen.html";
     String parserFileForWomen = "src/main/java/com/runeventsparser/Files/HtmlFiles/VseProbegiWomen.html";

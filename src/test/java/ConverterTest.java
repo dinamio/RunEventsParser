@@ -1,6 +1,6 @@
 import com.runeventsparser.bom.Result;
 import com.runeventsparser.service.Converter;
-import com.runeventsparser.service.TopRunnersParser;
+import com.runeventsparser.service.VseProbegiParser;
 import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
@@ -21,14 +21,14 @@ public class ConverterTest {
         List<String> pathList = new ArrayList<String>();
         pathList.add(pathForMenRace);
         pathList.add(pathForWomenRace);
-        TopRunnersParser topRunnersParser = new TopRunnersParser();
+        VseProbegiParser vseProbegiParser = new VseProbegiParser();
 
         List<Result> resultList = null;
 
         String jsonFile = "src/main/java/com/runeventsparser/Files/JsonFiles/VseProbegi.json";
 
         try {
-            resultList = topRunnersParser.parse(pathList);
+            resultList = vseProbegiParser.parse(pathList);
         } catch (IOException e) {
             e.printStackTrace();
         }

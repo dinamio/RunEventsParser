@@ -1,11 +1,8 @@
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.runeventsparser.bom.Result;
 import com.runeventsparser.bom.Sex;
-import com.runeventsparser.service.TopRunnersParser;
+import com.runeventsparser.service.VseProbegiParser;
 import org.junit.Test;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import static org.junit.Assert.assertEquals;
@@ -15,11 +12,11 @@ import static org.junit.Assert.assertNotNull;
  * Created by Николай on 31.01.2016.
  */
 
-public class TopRunnersParserTest {
+public class VseProbegiParserTest {
     @Test
     public  void parserTest() {
 
-        TopRunnersParser topRunnersParser = new TopRunnersParser();
+        VseProbegiParser vseProbegiParser = new VseProbegiParser();
 
         List<Result> resultList = null;
 
@@ -30,7 +27,7 @@ public class TopRunnersParserTest {
         pathList.add(pathForWomenRace);
 
         try {
-            resultList = topRunnersParser.parse(pathList);
+            resultList = vseProbegiParser.parse(pathList);
         } catch (IOException e) {
             e.printStackTrace();
         }
