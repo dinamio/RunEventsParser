@@ -72,6 +72,7 @@ public class VseProbegiParser {
 
     public List<Result> parseRaceForMen(String path) throws IOException {
         List<Result> resultList = new ArrayList<Result>();
+        CreateFile createFile = new CreateFile();
         Document doc=null;
         if((new File(parserFileForMen).exists())) {
             doc = Jsoup.parse(new File(parserFileForMen),"utf-8");
@@ -79,7 +80,7 @@ public class VseProbegiParser {
         else {
             try {
                 doc = Jsoup.connect(path).get();
-                createFileForOfflineParser(path,parserFileForMen);
+                createFile.createFileForOfflineParser(path,parserFileForMen);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -103,6 +104,7 @@ public class VseProbegiParser {
 
     public List<Result> parseRaceForWomen(String path) throws IOException {
         List<Result> resultList = new ArrayList<Result>();
+        CreateFile createFile = new CreateFile();
         Document doc=null;
         if((new File(parserFileForWomen).exists())) {
             doc = Jsoup.parse(new File(parserFileForWomen),"utf-8");
@@ -110,7 +112,7 @@ public class VseProbegiParser {
         else {
             try {
                 doc = Jsoup.connect(path).get();
-                createFileForOfflineParser(path,parserFileForWomen);
+                createFile.createFileForOfflineParser(path,parserFileForWomen);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -141,17 +143,5 @@ public class VseProbegiParser {
             e.printStackTrace();
         }
         return new Gson().toJson(resultList);
-    }
-
-
-    public void createFileForOfflineParser(String path, String parserFile){
-        try {
-            Document doc = Jsoup.connect(path).get();
-            BufferedWriter out = new BufferedWriter(new PrintWriter(parserFile,"utf-8"));
-            out.write(String.valueOf(doc));
-            out.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }

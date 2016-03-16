@@ -1,18 +1,14 @@
 package com.runeventsparser.service;
 
 
-import java.io.BufferedWriter;
+
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 
 import com.google.gson.Gson;
-import com.runeventsparser.bom.Result;
-import com.runeventsparser.bom.Runner;
-import com.runeventsparser.bom.Sex;
-import com.runeventsparser.bom.Time;
+import com.runeventsparser.bom.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -21,45 +17,54 @@ import org.jsoup.select.Elements;
 
 public class DneprRunParser {
 
-        String url = "http://dneprrun.dp.ua/sorevnovanija/te-zhe-na-manezhe-2016";
-        String paserFileDneprRun = "src/main/java/com/runeventsparser/Files/HtmlFiles/DneprRun.html";
+    public List<Result> parseSameOnManege (String url, String path) throws IOException {
 
-    public List<Runner> parse (String url) throws IOException {
         Document doc;
-        List<Runner> runners = new LinkedList<Runner>();
-        doc = Jsoup.connect(url).get();
-        createFileForOfflineParser(url,paserFileDneprRun);
+        List<Result> resultList = new LinkedList<Result>();
 
+        doc = Jsoup.connect(url).get();
+        CreateFile cf = new CreateFile();
+        cf.createFileForOfflineParser(url,path);
         Elements resultRows = doc.select("table").get(1).select("tr").select("li");
 
-        for (int i = 0; i < resultRows.size(); i++) {
-            if (resultRows.get(i).text().indexOf(":") == -1) continue;
+        for (int i = 8; i < resultRows.size(); i++) {
+            if (resultRows.get(i).text().indexOf(":") == -1) {
+                if (Character.isDigit(resultRows.get(i).text().charAt(0))){
+                    String[] wordNumb = resultRows.get(i).text().trim().split("\\s+");
+                    for(int j = 0; j<resultList.size(); j++ ){
+                        if (wordNumb[1].equals(resultList.get(j).getRunner().getSurname()) && wordNumb[2].equals(resultList.get(j).getRunner().getName())){
+                            resultList.get(j).setNumber(wordNumb[0]);
+                        }
+                    }
+                }
+                continue;
+            }
 
             String[] word = resultRows.get(i).text().trim().split("\\s+");
 
-
             Result result = new Result();
             result.setTime(setTime(word[word.length - 1]));
-
-            List<Result> resultList = new LinkedList<Result>();
             resultList.add(result);
+
+            Distance distance = new Distance();
+            if (i <= 18){
+            distance.setName("1609 метров");
+            distance.setLength(1.609);
+            }else {
+                distance.setName("3000 метров");
+                distance.setLength(3.0);
+            }
 
             Runner runner = new Runner();
             runner.setSurname(word[0]);
             runner.setName(word[1]);
-            runner.setSex(setSex(word[word.length - 2].charAt(0)));
-            runner.setResults(resultList);
-            runners.add(runner);
-        }
-        return runners;
-    }
+            runner.setSex(Sex.convertSex(word[word.length - 2].charAt(0)));
 
-    public Sex setSex (Character sex){
-        if (sex.equals('Ж') || sex.equals('ж')){
-         return Sex.FEMALE; }
-        else
-       return Sex.MALE;
-   }
+            result.setDistance(distance);
+            result.setRunner(runner);
+        }
+        return resultList;
+    }
 
     public Time setTime (String st){
         Time time = new Time();
@@ -73,24 +78,8 @@ public class DneprRunParser {
         time.setSeconds(Integer.valueOf(timeToken.nextToken()));
         return time;
 }
-    public void createFileForOfflineParser(String url, String pathFile){
-        try {
-            Document doc = Jsoup.connect(url).get();
-            BufferedWriter out = new BufferedWriter(new PrintWriter(pathFile,"utf-8"));
-            out.write(String.valueOf(doc));
-            out.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
-    public String parseToJson(String url){
-        List<Runner> runnerList = null;
-        try {
-            runnerList = parse(url);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return new Gson().toJson(runnerList);
+    public String parseToJson(String url,String path) throws IOException {
+        return new Gson().toJson(parseSameOnManege(url,path));
     }
 }

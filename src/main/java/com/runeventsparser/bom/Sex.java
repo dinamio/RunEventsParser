@@ -1,8 +1,13 @@
 package com.runeventsparser.bom;
 
 /**
- * Created by Николай on 31.01.2016.
+ * Created by пїЅпїЅпїЅпїЅпїЅпїЅпїЅ on 31.01.2016.
  */
 public enum Sex {
-    MALE,FEMALE
+    MALE,FEMALE;
+
+    public static Sex convertSex(Character sex){
+        if (sex.equals('Р–') || sex.equals('Р¶')) return Sex.FEMALE;
+        else return Sex.MALE;
+    }
 }

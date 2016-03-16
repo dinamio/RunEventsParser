@@ -10,24 +10,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Николай on 01.02.2016.
+ * Created by пїЅпїЅпїЅпїЅпїЅпїЅпїЅ on 01.02.2016.
  */
 public class Converter {
 
-    public  void convertToJson(String jsonFile) throws IOException {
-        String pathForMenRace ="http://vseprobegi.org/img/snowrun16_men_results.htm";
-        String pathForWomenRace="http://vseprobegi.org/img/snowrun16_women_results.htm";
-        List<String> pathList = new ArrayList<String>();
-        pathList.add(pathForMenRace);
-        pathList.add(pathForWomenRace);
-        String json;
-        VseProbegiParser vseProbegiParser = new VseProbegiParser();
-        json= vseProbegiParser.parseToJson(pathList);
+    public  void convertToJson(String jsonFile, String json) throws IOException {
+
         BufferedWriter out = new BufferedWriter(new PrintWriter(jsonFile,"utf-8"));
         out.write(json);
         out.close();
-
     }
+
     public List<Result> convertToJava(String jsonFile) throws IOException {
       Gson gson = new Gson();
         String json;
@@ -37,5 +30,4 @@ public class Converter {
         List<Result> listFromJson= gson.fromJson(json,type);
         return listFromJson;
     }
-
 }
