@@ -36,7 +36,6 @@ public class TopRunnersParserTest {
         assertEquals(Sex.MALE, resultList.get(31).getRunner().getSex());
         assertEquals("1069",resultList.get(31).getNumber());
         assertEquals("03:35:54",resultList.get(31).getTime().getTimeToString());
-        //TODO Assert distance.getName();
         assertEquals(String.valueOf(42.2), String.valueOf(resultList.get(31).getDistance().getLength()));
 
     }

@@ -35,9 +35,9 @@ public class TopRunnersParser {
 
         Time time = new Time();
 
-        String garbage = token.nextToken();
+        String tableNumber = token.nextToken();
 
-        garbage = token.nextToken();
+        String garbage = token.nextToken();
         result.setNumber(token.nextToken());
         result.setDistance(distance);
 
@@ -50,6 +50,7 @@ public class TopRunnersParser {
             runner.setName(token.nextToken());
         }
         else{
+
             runner.setSurname(token.nextToken());
             runner.setName(token.nextToken());
         }
@@ -79,6 +80,8 @@ public class TopRunnersParser {
         time.setSeconds(Integer.valueOf(timeToken.nextToken()));
         result.setTime(time);
         result.setRunner(runner);
+        if(tableNumber.equals("34")||tableNumber.equals("40"))
+            result=switchNameAndSurname(result);
         return result;
 
     }
@@ -101,7 +104,7 @@ public class TopRunnersParser {
         Element table = doc.select("table").get(0);
         Elements rows = table.select("tr");
         Distance distance = new Distance();
-        distance.setName("42.2 κμ");
+        distance.setName("Marathon");
         distance.setLength(42.2);
         for (int i = 1; i <rows.size(); i++) {
             String resultData = rows.get(i).text();
@@ -124,5 +127,12 @@ public class TopRunnersParser {
             e.printStackTrace();
         }
         return new Gson().toJson(resultList);
+    }
+    public Result switchNameAndSurname(Result result){
+        Runner runner = new Runner();
+        runner.setSurname(result.getRunner().getName());
+        runner.setName(result.getRunner().getSurname());
+        result.setRunner(runner);
+        return result;
     }
 }
