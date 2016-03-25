@@ -20,7 +20,7 @@ public class TopRunnersParser {
 
 
     public List<Result> parse(List<String> path) throws IOException {
-        List<Result> resultList = parseRaceForMen(path.get(0));
+        List<Result> resultList = parseTopRunners(path.get(0));
         return resultList;
     }
 
@@ -56,17 +56,11 @@ public class TopRunnersParser {
         }
         String sex=token.nextToken();
 
-        sex=Sex.convertSexToUtf(sex);
-
-        if(sex.contains("�"))
+        if(sex.contains("М"))
             runner.setSex(Sex.MALE);
         else
         runner.setSex(Sex.FEMALE);
         garbage = token.nextToken();
-
-
-
-
 
 
 
@@ -80,14 +74,28 @@ public class TopRunnersParser {
         time.setSeconds(Integer.valueOf(timeToken.nextToken()));
         result.setTime(time);
         result.setRunner(runner);
-        if(tableNumber.equals("34")||tableNumber.equals("40"))
-            result=switchNameAndSurname(result);
+        if(distance.getLength()==42.0) {
+            if (tableNumber.equals("34") || tableNumber.equals("40"))
+                result = switchNameAndSurname(result);
+        }
+        else
+        {
+            List<String> runnerWhoNeedSwitch = new ArrayList<String>();
+            runnerWhoNeedSwitch.add("303");
+            runnerWhoNeedSwitch.add("247");
+            runnerWhoNeedSwitch.add("234");
+            runnerWhoNeedSwitch.add("195");
+            runnerWhoNeedSwitch.add("116");
+            runnerWhoNeedSwitch.add("82");
+           if(runnerWhoNeedSwitch.contains(tableNumber))
+            result = switchNameAndSurname(result);
+        }
         return result;
 
     }
 
-    public List<Result> parseRaceForMen(String path) throws IOException {
-        List<Result> resultList = new ArrayList<Result>();
+    public List<Result> parseTopRunners(String path) throws IOException {
+        List<Result> totalResultList = new ArrayList<Result>();
         CreateFile createFile = new CreateFile();
         Document doc=null;
         if((new File(parserFile).exists())) {
@@ -101,22 +109,32 @@ public class TopRunnersParser {
                 e.printStackTrace();
             }
         }
-        Element table = doc.select("table").get(0);
-        Elements rows = table.select("tr");
-        Distance distance = new Distance();
-        distance.setName("Marathon");
-        distance.setLength(42.2);
-        for (int i = 1; i <rows.size(); i++) {
-            String resultData = rows.get(i).text();
-
-            try {
-                Result result = parseResultRow(resultData,distance);
-                resultList.add(result);
-            }catch (IllegalArgumentException e){
-                e.printStackTrace();
+        for(int j=0;j<2;j++) {
+            List<Result> currentResultList = new ArrayList<Result>();
+            Element table = doc.select("table").get(j);
+            Elements rows = table.select("tr");
+            Distance distance = new Distance();
+            if(j==0) {
+                distance.setName("42 км");
+                distance.setLength(42.0);
             }
+            else{
+                distance.setName("21 км");
+                distance.setLength(21.0);
+            }
+            for (int i = 1; i < rows.size(); i++) {
+                String resultData = rows.get(i).text();
+
+                try {
+                    Result result = parseResultRow(resultData, distance);
+                    currentResultList.add(result);
+                } catch (IllegalArgumentException e) {
+                    e.printStackTrace();
+                }
+            }
+            totalResultList.addAll(currentResultList);
         }
-        return resultList;
+        return totalResultList;
     }
 
     public String parseToJson(List<String> path){
@@ -129,9 +147,10 @@ public class TopRunnersParser {
         return new Gson().toJson(resultList);
     }
     public Result switchNameAndSurname(Result result){
-        Runner runner = new Runner();
+        String surname = result.getRunner().getSurname();
+        Runner runner = result.getRunner();
         runner.setSurname(result.getRunner().getName());
-        runner.setName(result.getRunner().getSurname());
+        runner.setName(surname);
         result.setRunner(runner);
         return result;
     }

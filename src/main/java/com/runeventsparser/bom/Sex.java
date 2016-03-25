@@ -13,14 +13,4 @@ public enum Sex {
         else return Sex.MALE;
     }
 
-    public static String convertSexToUtf(String sex){
-        try{
-            sex=new String(sex.getBytes(),"utf-8");
-        }
-        catch(UnsupportedEncodingException e)
-        {
-            e.printStackTrace();
-        }
-        return sex;
-    }
 }

@@ -30,13 +30,13 @@ public class TopRunnersParserTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        assertEquals(111,resultList.size());
+        assertEquals(423,resultList.size());
         assertEquals("Pisarchyk",resultList.get(31).getRunner().getSurname());
         assertEquals("Valeriy",resultList.get(31).getRunner().getName());
         assertEquals(Sex.MALE, resultList.get(31).getRunner().getSex());
         assertEquals("1069",resultList.get(31).getNumber());
         assertEquals("03:35:54",resultList.get(31).getTime().getTimeToString());
-        assertEquals(String.valueOf(42.2), String.valueOf(resultList.get(31).getDistance().getLength()));
+        assertEquals(String.valueOf(42.0), String.valueOf(resultList.get(31).getDistance().getLength()));
 
     }
 }
