@@ -2,7 +2,6 @@ package com.runeventsparser.service;
 
 
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.LinkedList;
@@ -12,7 +11,7 @@ import java.util.StringTokenizer;
 import com.google.gson.Gson;
 import com.runeventsparser.bom.*;
 import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.jsoup.Jsoup;
+
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
@@ -24,21 +23,9 @@ public class DneprRunParser {
     public List<Result> parseSameOnManege () throws IOException {
         String url ="http://dneprrun.dp.ua/sorevnovanija/te-zhe-na-manezhe-2016";
         String pathOffline = "src/main/java/com/runeventsparser/Files/HtmlFiles/te-zhe-na-manezhe-2016.html";
-        Document doc = null;
         List<Result> resultList = new LinkedList<Result>();
         CreateFile cf = new CreateFile();
-
-        if((new File(pathOffline).exists())) {
-            doc = Jsoup.parse(new File(pathOffline),"utf-8");
-        }
-        else {
-            try {
-                doc = Jsoup.connect(url).get();
-                cf.createFileForOfflineParser(url, pathOffline);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        Document doc = cf.checksAndCreatesFile(url,pathOffline);
         Elements resultRows = doc.select("table").get(1).select("tr").select("li");
         for (int i = 8; i < resultRows.size(); i++) {
             if (resultRows.get(i).text().indexOf(":") == -1) {
@@ -77,10 +64,10 @@ public class DneprRunParser {
         return resultList;
     }
 
-    public List<Result> parseSpringOnNose (String pathXls, String url) throws IOException {
-        String pathOffline = "src/main/java/com/runeventsparser/Files/HtmlFiles/vesna-na-nosu-2016.html";
+    public List<Result> parseSpringOnNose (String pathXls, String url, String pathOffline) throws IOException {
         List<Result> resultList = new LinkedList<Result>();
-        Document docUrl = null;
+        CreateFile cf = new CreateFile();
+        Document docUrl = cf.checksAndCreatesFile(url,pathOffline);
         HSSFRow row;
         HSSFWorkbook excelBook = new HSSFWorkbook(new FileInputStream(pathXls));
 
@@ -110,19 +97,6 @@ public class DneprRunParser {
                 break;
             }
         }
-
-        CreateFile cf = new CreateFile();
-        if ((new File(pathOffline).exists())) {
-            docUrl = Jsoup.parse(new File(pathOffline), "utf-8");
-        } else {
-            try {
-                docUrl = Jsoup.connect(url).get();
-                cf.createFileForOfflineParser(url, pathOffline);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
         Elements resultRows = docUrl.select("table").get(1).select("tr").select("li");
         for (int i = 0; i < resultRows.size(); i++) {
             String[] wordNumb = resultRows.get(i).text().trim().split("\\s+");

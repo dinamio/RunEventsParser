@@ -21,16 +21,19 @@ public class ConvertDneprRunTest {
     String pathJsonSpringOnNose = "src/main/java/com/runeventsparser/Files/JsonFiles/SpringOnNose.json";
     String pathXlsSpringOnNose = "src/main/java/com/runeventsparser/Files/XlsFiles/Spring.xls";
     String urlSpringOnNose = "http://dneprrun.dp.ua/sorevnovanija/vesna-na-nosu-2016";
+    String pathOfflineSpringOnNose = "src/main/java/com/runeventsparser/Files/HtmlFiles/vesna-na-nosu-2016.html";
+
 
     String pathJsonRiverFront = "src/main/java/com/runeventsparser/Files/JsonFiles/RiverFront.json";
     String pathXlsRiverFront = "src/main/java/com/runeventsparser/Files/XlsFiles/RiverFront.xls";
     String urlRiverFront = "http://dneprrun.dp.ua/sorevnovanija/riverfront-2016";
+    String pathOfflineRiverFront = "src/main/java/com/runeventsparser/Files/HtmlFiles/RiverFront.html";
 
     @Test
     public void testRun() throws IOException {
         parseDneprRunTest(pathJsonSameOnManege,dneprRun.parseSameOnManege());
-        parseDneprRunTest(pathJsonSpringOnNose,dneprRun.parseSpringOnNose(pathXlsSpringOnNose,urlSpringOnNose));
-        parseDneprRunTest(pathJsonRiverFront,dneprRun.parseSpringOnNose(pathXlsRiverFront,urlRiverFront));
+        parseDneprRunTest(pathJsonSpringOnNose,dneprRun.parseSpringOnNose(pathXlsSpringOnNose,urlSpringOnNose,pathOfflineSpringOnNose));
+        parseDneprRunTest(pathJsonRiverFront,dneprRun.parseSpringOnNose(pathXlsRiverFront,urlRiverFront,pathOfflineRiverFront));
     }
     public void parseDneprRunTest(String jsonFile,List<Result> dneprRun) throws IOException {
         DneprRunParser dneprRunParser = new DneprRunParser();
