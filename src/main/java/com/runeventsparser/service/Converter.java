@@ -21,7 +21,7 @@ public class Converter {
         out.close();
     }
 
-    public List<Result> convertToJava(String jsonFile) throws IOException {
+    public List<Result> convertToEntity(String jsonFile) throws IOException {
       Gson gson = new Gson();
         String json;
         BufferedReader bufferedReader = new BufferedReader( new InputStreamReader( new FileInputStream( jsonFile), "utf-8" ) );

@@ -1,6 +1,5 @@
 import com.runeventsparser.bom.Result;
 import com.runeventsparser.service.Converter;
-import com.runeventsparser.service.DneprRunParser;
 import com.runeventsparser.service.TopRunnersParser;
 import org.junit.Test;
 
@@ -13,7 +12,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 /**
- * Created by Николай on 23.03.2016.
+ * Created by пїЅпїЅпїЅпїЅпїЅпїЅпїЅ on 23.03.2016.
  */
 public class ConvertTopRunners {
     @Test
@@ -34,7 +33,7 @@ public class ConvertTopRunners {
               json = topRunnersParser.parseToJson(pathList);
               resultList = topRunnersParser.parse(pathList);
             converter.convertToJson(jsonFile,json);
-            listFromJson = converter.convertToJava(jsonFile);
+            listFromJson = converter.convertToEntity(jsonFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
