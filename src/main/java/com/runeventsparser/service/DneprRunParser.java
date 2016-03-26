@@ -21,8 +21,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
 
 public class DneprRunParser {
-
-    public List<Result> parseSameOnManege (String pathJson) throws IOException {
+    public List<Result> parseSameOnManege () throws IOException {
         String url ="http://dneprrun.dp.ua/sorevnovanija/te-zhe-na-manezhe-2016";
         String pathOffline = "src/main/java/com/runeventsparser/Files/HtmlFiles/te-zhe-na-manezhe-2016.html";
         Document doc = null;
@@ -78,38 +77,39 @@ public class DneprRunParser {
         return resultList;
     }
 
-    public List<Result> parseSpringOnNose (String pathJson) throws IOException {
-        String url = "http://dneprrun.dp.ua/sorevnovanija/vesna-na-nosu-2016";
-        String pathXls = "src/main/java/com/runeventsparser/Files/XlsFiles/Spring.xls";
+    public List<Result> parseSpringOnNose (String pathXls, String url) throws IOException {
         String pathOffline = "src/main/java/com/runeventsparser/Files/HtmlFiles/vesna-na-nosu-2016.html";
         List<Result> resultList = new LinkedList<Result>();
         Document docUrl = null;
         HSSFRow row;
         HSSFWorkbook excelBook = new HSSFWorkbook(new FileInputStream(pathXls));
 
-        for (int i = 1; i <= 75; i++) {
+        for (int i = 1; i <= excelBook.getSheetAt(0).getPhysicalNumberOfRows(); i++) {
             row = excelBook.getSheetAt(0).getRow(i);
+            if (row.getCell(1) != null) {
+                Result result = new Result();
 
-            Result result = new Result();
+                result.setTime(setTime(row.getCell(3).getStringCellValue()));
 
-            result.setTime(setTime(row.getCell(3).getStringCellValue()));
+                Distance distance = new Distance();
+                distance.setLength(Double.valueOf(row.getCell(1).getStringCellValue().substring(0, row.getCell(1).getStringCellValue().length() - 1)) / 1000);
+                distance.setName(row.getCell(1).getStringCellValue());
+                result.setDistance(distance);
 
-            Distance distance = new Distance();
-            distance.setLength(Double.valueOf(row.getCell(1).getStringCellValue().substring(0, row.getCell(1).getStringCellValue().length() - 1)) / 1000);
-            distance.setName(row.getCell(1).getStringCellValue());
-            result.setDistance(distance);
+                Runner runner = new Runner();
+                runner.setSurname(row.getCell(2).getStringCellValue().substring(0, row.getCell(2).getStringCellValue().lastIndexOf(" ")));
+                runner.setName(row.getCell(2).getStringCellValue().substring(row.getCell(2).getStringCellValue().substring(0, row.getCell(2).getStringCellValue().lastIndexOf(" ")).length()).trim());
+                result.setRunner(runner);
 
-            Runner runner = new Runner();
-            runner.setSurname(row.getCell(2).getStringCellValue().substring(0, row.getCell(2).getStringCellValue().lastIndexOf(" ")));
-            runner.setName(row.getCell(2).getStringCellValue().substring(row.getCell(2).getStringCellValue().substring(0, row.getCell(2).getStringCellValue().lastIndexOf(" ")).length()).trim());
-            result.setRunner(runner);
-
-            if (row.getCell(5) == null) {
-                runner.setSex(Sex.FEMALE);
-            } else runner.setSex(Sex.MALE);
-            resultList.add(result);
+                if (row.getCell(5) == null) {
+                    runner.setSex(Sex.FEMALE);
+                } else runner.setSex(Sex.MALE);
+                resultList.add(result);
+            }else{
+                excelBook.close();
+                break;
+            }
         }
-        excelBook.close();
 
         CreateFile cf = new CreateFile();
         if ((new File(pathOffline).exists())) {

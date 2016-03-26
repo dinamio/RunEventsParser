@@ -17,14 +17,21 @@ import static org.junit.Assert.assertNotNull;
 public class ConvertDneprRunTest {
     DneprRunParser dneprRun = new DneprRunParser();
     String pathJsonSameOnManege = "src/main/java/com/runeventsparser/Files/JsonFiles/SameOnManege.json";
+
     String pathJsonSpringOnNose = "src/main/java/com/runeventsparser/Files/JsonFiles/SpringOnNose.json";
+    String pathXlsSpringOnNose = "src/main/java/com/runeventsparser/Files/XlsFiles/Spring.xls";
+    String urlSpringOnNose = "http://dneprrun.dp.ua/sorevnovanija/vesna-na-nosu-2016";
+
+    String pathJsonRiverFront = "src/main/java/com/runeventsparser/Files/JsonFiles/RiverFront.json";
+    String pathXlsRiverFront = "src/main/java/com/runeventsparser/Files/XlsFiles/RiverFront.xls";
+    String urlRiverFront = "http://dneprrun.dp.ua/sorevnovanija/riverfront-2016";
 
     @Test
     public void testRun() throws IOException {
-        parseDneprRunTest(pathJsonSameOnManege,dneprRun.parseSameOnManege(pathJsonSameOnManege));
-        parseDneprRunTest(pathJsonSpringOnNose,dneprRun.parseSpringOnNose(pathJsonSpringOnNose));
+        parseDneprRunTest(pathJsonSameOnManege,dneprRun.parseSameOnManege());
+        parseDneprRunTest(pathJsonSpringOnNose,dneprRun.parseSpringOnNose(pathXlsSpringOnNose,urlSpringOnNose));
+        parseDneprRunTest(pathJsonRiverFront,dneprRun.parseSpringOnNose(pathXlsRiverFront,urlRiverFront));
     }
-
     public void parseDneprRunTest(String jsonFile,List<Result> dneprRun) throws IOException {
         DneprRunParser dneprRunParser = new DneprRunParser();
 
